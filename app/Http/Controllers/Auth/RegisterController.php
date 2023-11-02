@@ -50,14 +50,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'first_name' => ['required', 'string', 'max:255', 'regex:^[A-Za-z]\\w{5, 29}$^'],
+            'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users', 'regex:/(.*)@myemail\.com/i'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'dob' => ['required', 'date'],
-            'gender' => ['required', 'ENUM' => ['M','F']],
+            'gender' => ['required', 'in:M,F'],
             'location' => ['required', 'string', 'max:255'],
             'image' => ['file'],
-            'mobile_num' => ['required', 'numeric', 'max:10', 'min:10', 'unique:users'],
+            'mobile_num' => ['required', 'string', 'max:10', 'min:10', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -71,8 +71,13 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
             'email' => $data['email'],
+            'dob' => $data['dob'],
+            'gender' => $data['gender'],
+            'location'=> $data['location'],
+            'mobile_num' => $data['mobile_num'],
             'password' => Hash::make($data['password']),
         ]);
     }
